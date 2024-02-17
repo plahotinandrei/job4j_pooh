@@ -14,7 +14,7 @@ public class ProducerClient {
              var input = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             int count = 0;
             while (true) {
-                out.println("queue;weather;text " + count++);
+                out.println("topic;weather;text " + count++);
                 out.flush();
             }
         }
