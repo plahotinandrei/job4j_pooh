@@ -31,11 +31,12 @@ public class TopicSchema implements Schema {
             for (var queueKey : receivers.keySet()) {
                 var queue = data.getOrDefault(queueKey, new LinkedBlockingQueue<>());
                 var receiversByQueue = receivers.get(queueKey);
-                var data = queue.poll();
-                while (data != null) {
-                    String finalData = data;
-                    receiversByQueue.forEach((receiver) -> receiver.receive(finalData));
-                    data = queue.poll();
+                while (true) {
+                    var data = queue.poll();
+                    if (data == null) {
+                        break;
+                    }
+                    receiversByQueue.forEach((receiver) -> receiver.receive(data));
                 }
             }
             condition.off();
